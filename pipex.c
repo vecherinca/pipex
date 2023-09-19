@@ -85,7 +85,6 @@ t_a_list	*create_list(int argc, char **argv, t_pipex pipex)
 		temp -> path = get_path(temp->cmd[0], pipex);
 		temp->next = NULL;
 		ft_lstadd_back(&head, temp);
-		//free_2dim(temp -> cmd);
 		i++;
 	}
 

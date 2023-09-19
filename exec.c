@@ -14,7 +14,6 @@ void init_child(int count, t_pipex pipex, char **env, t_a_list *cmd)
 			dup2(fd[1], STDOUT_FILENO);
             close(pipex.file1);
             close(fd[0]);
-            close(fd[1]);
 		}
 		if (count == pipex.cmd_count - 1)
         {
