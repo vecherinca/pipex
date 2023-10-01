@@ -31,10 +31,10 @@ void init_child(int count, t_pipex pipex, char **env, t_a_list *cmd)
 	}
 	else
 	{
-		wait(NULL);
+		waitpid(pid, 0, 0);
 		dup2(fd[0], STDIN_FILENO);
 		close(fd[1]);
-		close(fd[0]);
+		//close(fd[0]);
 	}	
 }
 

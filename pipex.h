@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maria <maria@student.42.fr>                +#+  +:+       +#+        */
+/*   By: mklimina <mklimina@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 20:36:37 by mklimina          #+#    #+#             */
-/*   Updated: 2023/08/13 23:01:15 by maria            ###   ########.fr       */
+/*   Updated: 2023/10/01 17:54:17 by mklimina         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 #include <stdlib.h>
 #include "pipex.h"
 #include <sys/wait.h>
+#include "get_next_line/get_next_line.h"
 
 typedef struct t_a_list
 {
@@ -41,10 +42,13 @@ typedef struct t_pipex
 {
 	int	file1;
 	int	file2;	
+	char *limiter;
 	int cmd_count;
 	char **paths;
 	char **cmds;
 	char **args;
+	char *cmd1;
+	char *cmd2;
 	t_head_a *cmd;
 	
 }t_pipex;
@@ -60,4 +64,5 @@ void	free_2dim(char **to_free);
 void execute(t_pipex pipex, char **env);
 void	free_list(t_a_list *head, t_head_a *main);
 void init_child(int count, t_pipex pipex, char **env, t_a_list *cmd);
+int		ft_strcmp(char *s1, char *s2);
 #endif
