@@ -6,13 +6,13 @@
 /*   By: mklimina <mklimina@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 17:56:33 by mklimina          #+#    #+#             */
-/*   Updated: 2022/12/15 16:02:11 by mklimina         ###   ########.fr       */
+/*   Updated: 2023/10/01 18:57:21 by mklimina         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-int	ft_strlen(const char *s)
+int	ft_strlen_gnl(const char *s)
 {
 	int	i;
 
@@ -34,7 +34,7 @@ void	ft_bzero(void *s, size_t n)
 	}
 }
 
-void	*ft_calloc(size_t nmemb, size_t size)
+void	*ft_calloc_gnl(size_t nmemb, size_t size)
 {	
 	void	*output;
 
@@ -49,7 +49,7 @@ void	*ft_calloc(size_t nmemb, size_t size)
 	return (output);
 }
 
-char	*ft_strjoin(char const *s1, char const *s2)
+char	*ft_strjoin_gnl(char const *s1, char const *s2)
 {
 	int		i;
 	int		j;

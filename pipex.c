@@ -6,7 +6,7 @@
 /*   By: mklimina <mklimina@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 20:36:15 by mklimina          #+#    #+#             */
-/*   Updated: 2023/10/01 18:16:24 by mklimina         ###   ########.fr       */
+/*   Updated: 2023/10/01 18:54:05 by mklimina         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ t_a_list	*create_list(int argc, char **argv, t_pipex pipex)
 	int			i;
 
 	head = NULL;
-	i = 2;
+	i = 2 + pipex.is_here_doc;
 	while (i < argc - 1)
 	{
 		temp = malloc(sizeof(t_a_list));
@@ -109,6 +109,7 @@ t_pipex	init(char **argv, t_pipex pipex, int argc, char **env)
 	pipex.file1 = open(argv[1], O_RDONLY);
 	pipex.file2 = open(argv[argc - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	pipex.cmd_count = argc - 3;
+	pipex.is_here_doc = 0;
 	pipex.cmd = define_list(argc, argv, pipex);
 	return (pipex);
 }
@@ -116,17 +117,32 @@ t_pipex	init(char **argv, t_pipex pipex, int argc, char **env)
 t_pipex	here_doc_init(int argc, char **argv, char **env, t_pipex pipex)
 {
 	pipex.paths = parse_env(env);
-	pipex.limiter = argv[2];
+	pipex.limiter = ft_strjoin(argv[2], "/n");
 	pipex.cmd1 = get_path(argv[3], pipex);
 	pipex.cmd2 = get_path(argv[4], pipex);
 	pipex.file1 = open("tmp.txt", O_CREAT | O_RDWR, 0666);
 	pipex.file2 = open(argv[argc - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	// printf("limiter -> %s\n", pipex.limiter);
-	// printf("cmd1 -> %s\n", pipex.cmd1);
-	// printf("cmd2 -> %s\n", pipex.cmd2);
+	pipex.is_here_doc = 1;
+	pipex.cmd = define_list(argc, argv, pipex);
+	printf("limiter -> %s\n", pipex.limiter);
+	print(pipex);
 	// printf("Done heredoc");
+	return(pipex);
 }
 
+void here_doc(t_pipex pipex)
+{
+	char *check;
+
+	while (1)
+	{
+		check = get_next_line(0);
+		if(!check)
+			return ;
+		if (!ft_strncmp(check, pipex.limiter, ft_strlen(check)))
+			break;
+	}
+}
 int	main(int argc, char **argv, char **env)
 {
 	t_pipex	pipex;
@@ -139,9 +155,9 @@ int	main(int argc, char **argv, char **env)
 	}
 	else
 		pipex = init(argv, pipex, argc, env);
-		execute(pipex, env);
-		free_list(pipex.cmd->first, pipex.cmd);
-		close(pipex.file1);
-		close(pipex.file2);
-		free_2dim(pipex.paths);
+	execute(pipex, env);
+	free_list(pipex.cmd->first, pipex.cmd);
+	close(pipex.file1);
+	close(pipex.file2);
+	free_2dim(pipex.paths);
 }

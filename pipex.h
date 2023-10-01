@@ -6,7 +6,7 @@
 /*   By: mklimina <mklimina@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 20:36:37 by mklimina          #+#    #+#             */
-/*   Updated: 2023/10/01 17:54:17 by mklimina         ###   ########.fr       */
+/*   Updated: 2023/10/01 18:34:42 by mklimina         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ typedef struct t_pipex
 	char **args;
 	char *cmd1;
 	char *cmd2;
+	int is_here_doc;
 	t_head_a *cmd;
 	
 }t_pipex;
