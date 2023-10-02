@@ -6,7 +6,7 @@
 /*   By: mklimina <mklimina@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 20:36:15 by mklimina          #+#    #+#             */
-/*   Updated: 2023/10/01 18:54:05 by mklimina         ###   ########.fr       */
+/*   Updated: 2023/10/02 16:28:47 by mklimina         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,31 +117,31 @@ t_pipex	init(char **argv, t_pipex pipex, int argc, char **env)
 t_pipex	here_doc_init(int argc, char **argv, char **env, t_pipex pipex)
 {
 	pipex.paths = parse_env(env);
-	pipex.limiter = ft_strjoin(argv[2], "/n");
+	pipex.limiter = ft_strjoin(argv[2], "\n");
 	pipex.cmd1 = get_path(argv[3], pipex);
 	pipex.cmd2 = get_path(argv[4], pipex);
 	pipex.file1 = open("tmp.txt", O_CREAT | O_RDWR, 0666);
-	pipex.file2 = open(argv[argc - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	//pipex.file2 = open(argv[5], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	pipex.is_here_doc = 1;
 	pipex.cmd = define_list(argc, argv, pipex);
-	printf("limiter -> %s\n", pipex.limiter);
-	print(pipex);
-	// printf("Done heredoc");
 	return(pipex);
 }
 
 void here_doc(t_pipex pipex)
 {
 	char *check;
-
+	int fd;
+	fd = open("tmp.txt", O_CREAT | O_RDWR, 0666);;
 	while (1)
 	{
 		check = get_next_line(0);
 		if(!check)
 			return ;
-		if (!ft_strncmp(check, pipex.limiter, ft_strlen(check)))
+		if (!ft_strcmp(check, pipex.limiter))
 			break;
+		ft_putstr_fd(check, pipex.file1); 
 	}
+	pipex.file2 = fd;
 }
 int	main(int argc, char **argv, char **env)
 {
@@ -150,8 +150,7 @@ int	main(int argc, char **argv, char **env)
 	if (!ft_strcmp(argv[1], "here_doc"))
 	{
 		pipex = here_doc_init(argc, argv, env, pipex);
-		
-		//printf("Let's go heredoc");
+		here_doc(pipex);
 	}
 	else
 		pipex = init(argv, pipex, argc, env);

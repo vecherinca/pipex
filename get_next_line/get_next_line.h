@@ -6,7 +6,7 @@
 /*   By: mklimina <mklimina@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 17:50:09 by mklimina          #+#    #+#             */
-/*   Updated: 2022/12/14 18:32:46 by mklimina         ###   ########.fr       */
+/*   Updated: 2023/10/02 13:53:45 by mklimina         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,11 @@
 # include <sys/stat.h>
 
 char	*get_next_line(int fd);
-int		ft_strlen(const char *s);
-void	*ft_calloc(size_t nmemb, size_t size);
-char	*ft_strjoin(char const *s1, char const *s2);
+int		ft_strlen_gnl(const char *s);
+void	*ft_calloc_gnl(size_t nmemb, size_t size);
+char	*ft_strjoin_gnl(char const *s1, char const *s2);
 char	*ft_strdup(const char *src);
-void	ft_bzero(void *s, size_t n);
+void	ft_bzero_gnl(void *s, size_t n);
 int		ft_do_ze_line(char **line, char *buffer, char **stash);
 
 # ifndef BUFFER_SIZE

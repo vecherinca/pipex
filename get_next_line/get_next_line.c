@@ -6,7 +6,7 @@
 /*   By: mklimina <mklimina@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 17:49:56 by mklimina          #+#    #+#             */
-/*   Updated: 2022/12/15 16:09:29 by mklimina         ###   ########.fr       */
+/*   Updated: 2023/10/02 13:53:15 by mklimina         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ char	*clean_stash(char *stash, char *buffer)
 	j = 0;
 	while (stash[i] != '\n' && stash[i] != '\0')
 		i++;
-	ft_bzero(buffer, BUFFER_SIZE);
+	ft_bzero_gnl(buffer, BUFFER_SIZE);
 	if (stash[i] != '\0')
 		i++;
 	while (stash[i] != '\0')
@@ -63,7 +63,7 @@ char	*get_the_line(char *stash)
 		i++;
 	if (i == 0)
 		return (NULL);
-	line = ft_calloc(sizeof(char), i + 2);
+	line = ft_calloc_gnl(sizeof(char), i + 2);
 	if (!line)
 		return (NULL);
 	i = 0;
@@ -82,7 +82,7 @@ char	*init_stash(char *stash, char *buffer, int fd)
 	if (buffer[0] == '\0')
 		read(fd, buffer, BUFFER_SIZE);
 	stash = NULL;
-	stash = ft_strjoin("", buffer);
+	stash = ft_strjoin_gnl("", buffer);
 	return (stash);
 }
 
@@ -101,7 +101,7 @@ char	*get_next_line(int fd)
 		return (NULL);
 	while ((bytes != 0 && check_the_line(buffer) != 1) || bytes == -1)
 	{
-		ft_bzero(buffer, BUFFER_SIZE);
+		ft_bzero_gnl(buffer, BUFFER_SIZE);
 		bytes = read(fd, buffer, BUFFER_SIZE);
 		if ((bytes == 0 && check_the_line(buffer) == 0) || (bytes == -1))
 			break ;

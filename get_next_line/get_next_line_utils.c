@@ -6,7 +6,7 @@
 /*   By: mklimina <mklimina@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/04 17:56:33 by mklimina          #+#    #+#             */
-/*   Updated: 2023/10/01 18:57:21 by mklimina         ###   ########.fr       */
+/*   Updated: 2023/10/02 13:54:14 by mklimina         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	ft_strlen_gnl(const char *s)
 	return (i);
 }
 
-void	ft_bzero(void *s, size_t n)
+void	ft_bzero_gnl(void *s, size_t n)
 {
 	unsigned int	i;
 
@@ -45,7 +45,7 @@ void	*ft_calloc_gnl(size_t nmemb, size_t size)
 	output = (void *)malloc(size * nmemb);
 	if (!output)
 		return (NULL);
-	ft_bzero(output, nmemb * size);
+	ft_bzero_gnl(output, nmemb * size);
 	return (output);
 }
 
@@ -60,8 +60,8 @@ char	*ft_strjoin_gnl(char const *s1, char const *s2)
 		return (NULL);
 	i = 0;
 	j = 0;
-	len = ft_strlen(s1) + ft_strlen(s2) + 1;
-	output = ft_calloc(sizeof(char), len);
+	len = ft_strlen_gnl(s1) + ft_strlen_gnl(s2) + 1;
+	output = ft_calloc_gnl(sizeof(char), len);
 	if (!output)
 		return (NULL);
 	while (s1[i] != '\0')
@@ -80,11 +80,11 @@ char	*ft_strjoin_gnl(char const *s1, char const *s2)
 
 int	ft_do_ze_line(char **line, char *buffer, char **stash)
 {
-	*line = ft_strjoin("", *stash);
+	*line = ft_strjoin_gnl("", *stash);
 	if (!*line)
 		return (1);
 	free(*stash);
-	*stash = ft_strjoin(*line, buffer);
+	*stash = ft_strjoin_gnl(*line, buffer);
 	if (!*stash)
 		return (free(*line), 1);
 	free(*line);

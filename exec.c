@@ -43,10 +43,12 @@ void execute(t_pipex pipex, char **env)
 	int i = 0;
 	t_a_list *cmd;
 	cmd = pipex.cmd -> first;
+	print(pipex);
 	while (cmd != NULL)
 	{
 		init_child(i, pipex, env, cmd);
 		cmd = cmd -> next;
+		printf("i --> %d", i);
 		i++;
 	}
 	
