@@ -6,7 +6,7 @@
 /*   By: mklimina <mklimina@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 16:58:27 by mklimina          #+#    #+#             */
-/*   Updated: 2023/10/03 20:33:41 by mklimina         ###   ########.fr       */
+/*   Updated: 2023/10/03 21:42:23 by mklimina         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,21 +34,14 @@ void	setup_child(int count, t_pipex *pipex, char **env, t_a_list *cmd)
 	// if it fails exit
 	if (count == 0)
 	{
-		pipex ->file1 = open(pipex -> infile, O_RDONLY);
-		// printf("pipex -> here-doc ---> %d", pipex -> is_here_doc);
-		// if (pipex -> is_here_doc != 1)
-		// 	pipex ->file1 = open(pipex -> infile, O_RDONLY);
-		// else
-		// 	pipex -> file1 = open("tmp.txt", O_CREAT | O_RDWR, 0666);
-		// open infile here
+		if (pipex -> is_here_doc == 0)
+			pipex->file1 = open(pipex -> infile, O_RDONLY);
 		dup2(pipex->file1, STDIN_FILENO);
 		close(pipex->file1);
 	}
 	if (count == pipex->cmd_count - 1)
 	{
-		pipex->file2 = open(pipex -> outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		// protection 
-		// open outfile here
+		pipex->file2 = open(pipex -> outfile, O_CREAT | O_RDWR | O_TRUNC, 0666);
 		dup2(pipex->file2, STDOUT_FILENO);
 		close(pipex->file2);
 	}

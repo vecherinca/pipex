@@ -39,4 +39,4 @@ fclean: clean
 re: fclean all
 	printf '\033[32m[ ✔ ] %s\n\033[0m' "restarted with success hope it compiles"
 
-.PHONY: all clean fclean re all 
+.PHONY: all clean fclean re all
