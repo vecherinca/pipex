@@ -6,10 +6,13 @@ CFLAGS = -Wall -Wextra -Werror
 SRC =  \
 	pipex.c \
 	exec.c \
+	init.c \
 	free.c \
+	here_doc.c \
 	ft_split.c \
 	help_red.c \
 	helpers.c \
+	helpers2.c \
 	gnl/get_next_line.c \
 	gnl/get_next_line_utils.c \
 
