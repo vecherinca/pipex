@@ -6,7 +6,7 @@
 /*   By: mklimina <mklimina@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 20:36:37 by mklimina          #+#    #+#             */
-/*   Updated: 2023/10/03 16:12:46 by mklimina         ###   ########.fr       */
+/*   Updated: 2023/10/03 17:17:47 by mklimina         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ typedef struct t_head_a
 
 typedef struct t_pipex
 {
+	int				fd[2];
 	int				file1;
 	int				file2;
 	char			*limiter;

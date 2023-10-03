@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   init.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mklimina <mklimina@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/10/03 16:54:34 by mklimina          #+#    #+#             */
+/*   Updated: 2023/10/03 16:56:05 by mklimina         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "pipex.h"
 
 t_pipex	init(char **argv, t_pipex pipex, int argc, char **env)
@@ -20,5 +32,5 @@ t_pipex	here_doc_init(int argc, char **argv, char **env, t_pipex pipex)
 	pipex.is_here_doc = 1;
 	pipex.cmd_count = 2;
 	pipex.cmd = define_list(argc, argv, pipex);
-	return(pipex);
+	return (pipex);
 }

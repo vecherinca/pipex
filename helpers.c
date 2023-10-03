@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   helpers.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mklimina <mklimina@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/10/03 16:54:51 by mklimina          #+#    #+#             */
+/*   Updated: 2023/10/03 16:57:36 by mklimina         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "pipex.h"
 
 void	ft_bzero(void *s, size_t n)
@@ -13,7 +25,7 @@ void	ft_bzero(void *s, size_t n)
 }
 
 void	*ft_calloc(size_t nmemb, size_t size)
-{	
+{
 	void	*output;
 
 	if (nmemb == 0 || size == 0)
@@ -48,41 +60,6 @@ char	*ft_strstr(char *str, char *to_find)
 		i++;
 	}
 	return (0);
-}
-
-int	ft_strncmp(const char *s1, const char *s2, size_t n)
-{
-	size_t	i;
-
-	i = 0;
-	if (n == 0)
-		return (0);
-	while (s1[i] != '\0' && s2[i] != '\0' && s1[i] == s2[i] && (i < n - 1))
-	{
-		i++;
-	}
-	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
-}
-
-int	ft_strcmp(char *s1, char *s2)
-{
-	int	i;
-
-	i = 0;
-	while ((s1[i] != '\0' && s2[i] != '\0') && (s1[i] == s2[i]))
-	{
-			i++;
-	}
-	return (s1[i] - s2[i]);
-}
-int	ft_strlen(const char *s)
-{
-	int	i;
-
-	i = 0;
-	while (s[i])
-		i++;
-	return (i);
 }
 
 char	*ft_strjoin(char const *s1, char const *s2)
