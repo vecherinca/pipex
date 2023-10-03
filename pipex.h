@@ -6,13 +6,13 @@
 /*   By: mklimina <mklimina@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 20:36:37 by mklimina          #+#    #+#             */
-/*   Updated: 2023/10/02 16:18:57 by mklimina         ###   ########.fr       */
+/*   Updated: 2023/10/03 13:57:18 by mklimina         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PIPEX_H
 # define PIPEX_H
-# include "get_next_line/get_next_line.h"
+# include "gnl/get_next_line.h"
 # include "pipex.h"
 # include <fcntl.h>
 # include <stdio.h>

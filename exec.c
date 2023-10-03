@@ -3,9 +3,19 @@
 void init_child(int count, t_pipex pipex, char **env, t_a_list *cmd)
 {
 	int fd[2];
-	pipe(fd);
+	if (pipe(fd) == -1)
+	{
+		ft_putstr_fd("An error occured with the pipe creation", 2);
+		exit(1);
+		//don't forget to free things
+	}
 	pid_t pid; 
 	pid = fork();
+	if (pid < 0)
+	{
+		ft_putstr_fd("An error occured with the forking", 2);
+		exit(1);
+	}
 	if (pid == 0)
 	{
 		if (count == 0)

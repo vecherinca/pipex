@@ -6,7 +6,7 @@
 /*   By: mklimina <mklimina@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 20:36:15 by mklimina          #+#    #+#             */
-/*   Updated: 2023/10/02 18:27:09 by mklimina         ###   ########.fr       */
+/*   Updated: 2023/10/03 14:46:20 by mklimina         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ char	*get_path(char *cmd, t_pipex pipex)
 	if (flag == 0)
 	{
 		printf("Command %s does not exist", cmd);
-		exit(23);
+		//exit(23);
 	}
 	return (0);
 }
@@ -138,8 +138,10 @@ void here_doc(t_pipex pipex)
 		if (!ft_strcmp(check, pipex.limiter))
 			break;
 		ft_putstr_fd(check, pipex.file1); 
+		free(check);
 	}
 	unlink("tmp.txt");
+	free(check);
 }
 int	main(int argc, char **argv, char **env)
 {
@@ -149,6 +151,7 @@ int	main(int argc, char **argv, char **env)
 	{
 		pipex = here_doc_init(argc, argv, env, pipex);
 		here_doc(pipex);
+		free(pipex.limiter);
 	}
 	else
 		pipex = init(argv, pipex, argc, env);
