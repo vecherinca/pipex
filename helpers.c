@@ -114,16 +114,6 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	return (output);
 }
 
-void print(t_pipex pipex)
-{
-	t_a_list *current_node = pipex.cmd->first;
-	while (current_node != NULL)
-	{
-			printf("cmd ----> %s\n", current_node -> path);
-    		current_node = current_node->next;
-	}
-}
-
 void	ft_lstadd_back(t_a_list **lst, t_a_list *new)
 {
 	t_a_list	*tmp;

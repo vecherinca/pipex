@@ -6,7 +6,7 @@
 /*   By: mklimina <mklimina@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 20:36:37 by mklimina          #+#    #+#             */
-/*   Updated: 2023/10/03 13:57:18 by mklimina         ###   ########.fr       */
+/*   Updated: 2023/10/03 16:12:46 by mklimina         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,9 @@
 # include "pipex.h"
 # include <fcntl.h>
 # include <stdio.h>
-# include <stdio.h>
-# include <stdlib.h>
 # include <stdlib.h>
 # include <sys/types.h>
 # include <sys/wait.h>
-# include <unistd.h>
 # include <unistd.h>
 
 typedef struct t_a_list
@@ -51,19 +48,29 @@ typedef struct t_pipex
 	t_head_a		*cmd;
 
 }					t_pipex;
+
 void				print(t_pipex pipex);
 char				**ft_split(char const *s, char c);
 void				*ft_calloc(size_t nmemb, size_t size);
+t_head_a			*define_list(int argc, char **argv, t_pipex pipex);
+char				**parse_env(char **env);
 char				*ft_strstr(char *str, char *to_find);
 int					ft_strncmp(const char *s1, const char *s2, size_t n);
 int					ft_strlen(const char *s);
 void				ft_lstadd_back(t_a_list **lst, t_a_list *new);
 char				*ft_strjoin(char const *s1, char const *s2);
+void				print_cmd_does_not_exist(char *cmd);
 void				free_2dim(char **to_free);
 void				execute(t_pipex pipex, char **env);
 void				free_list(t_a_list *head, t_head_a *main);
 void				init_child(int count, t_pipex pipex, char **env,
 						t_a_list *cmd);
 int					ft_strcmp(char *s1, char *s2);
+t_pipex				init(char **argv, t_pipex pipex, int argc, char **env);
+t_pipex				here_doc_init(int argc, char **argv, char **env,
+						t_pipex pipex);
+
+void				here_doc(t_pipex pipex);
 void				ft_putstr_fd(char *s, int fd);
+char				*return_path(char *path, char *cmd);
 #endif
