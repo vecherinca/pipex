@@ -6,7 +6,7 @@
 /*   By: mklimina <mklimina@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 20:36:37 by mklimina          #+#    #+#             */
-/*   Updated: 2023/10/03 17:17:47 by mklimina         ###   ########.fr       */
+/*   Updated: 2023/10/03 19:56:43 by mklimina         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,12 @@ typedef struct t_head_a
 
 typedef struct t_pipex
 {
+	int				prev;
 	int				fd[2];
 	int				file1;
 	int				file2;
+	char			*outfile;
+	char			*infile;
 	char			*limiter;
 	int				cmd_count;
 	char			**paths;
@@ -50,7 +53,6 @@ typedef struct t_pipex
 
 }					t_pipex;
 
-void				print(t_pipex pipex);
 char				**ft_split(char const *s, char c);
 void				*ft_calloc(size_t nmemb, size_t size);
 t_head_a			*define_list(int argc, char **argv, t_pipex pipex);
@@ -64,8 +66,6 @@ void				print_cmd_does_not_exist(char *cmd);
 void				free_2dim(char **to_free);
 void				execute(t_pipex pipex, char **env);
 void				free_list(t_a_list *head, t_head_a *main);
-void				init_child(int count, t_pipex pipex, char **env,
-						t_a_list *cmd);
 int					ft_strcmp(char *s1, char *s2);
 t_pipex				init(char **argv, t_pipex pipex, int argc, char **env);
 t_pipex				here_doc_init(int argc, char **argv, char **env,

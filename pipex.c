@@ -6,7 +6,7 @@
 /*   By: mklimina <mklimina@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 20:36:15 by mklimina          #+#    #+#             */
-/*   Updated: 2023/10/03 16:13:00 by mklimina         ###   ########.fr       */
+/*   Updated: 2023/10/03 18:25:52 by mklimina         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,5 @@ int	main(int argc, char **argv, char **env)
 		pipex = init(argv, pipex, argc, env);
 	execute(pipex, env);
 	free_list(pipex.cmd->first, pipex.cmd);
-	close(pipex.file1);
-	close(pipex.file2);
 	free_2dim(pipex.paths);
 }

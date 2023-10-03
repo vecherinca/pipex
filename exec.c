@@ -6,65 +6,68 @@
 /*   By: mklimina <mklimina@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 16:58:27 by mklimina          #+#    #+#             */
-/*   Updated: 2023/10/03 17:14:34 by mklimina         ###   ########.fr       */
+/*   Updated: 2023/10/03 20:33:41 by mklimina         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	setup_child(int count, t_pipex pipex, char **env, t_a_list *cmd)
+
+
+
+
+
+// ./pipex Makefile ls cat grep wc lsblk outfile
+
+
+// 0 = ls
+// last = lsblk
+
+// 0 != cat grep wc lsblk
+
+// last != ls cat grep wc 
+
+void	setup_child(int count, t_pipex *pipex, char **env, t_a_list *cmd)
 {
+	// free(pid);
+	// open files here !!!!!
+	// if it fails exit
 	if (count == 0)
 	{
-		dup2(pipex.file1, STDIN_FILENO);
-		dup2(pipex.fd[1], STDOUT_FILENO);
-		close(pipex.file1);
-		close(pipex.fd[0]);
+		pipex ->file1 = open(pipex -> infile, O_RDONLY);
+		// printf("pipex -> here-doc ---> %d", pipex -> is_here_doc);
+		// if (pipex -> is_here_doc != 1)
+		// 	pipex ->file1 = open(pipex -> infile, O_RDONLY);
+		// else
+		// 	pipex -> file1 = open("tmp.txt", O_CREAT | O_RDWR, 0666);
+		// open infile here
+		dup2(pipex->file1, STDIN_FILENO);
+		close(pipex->file1);
 	}
-	if (count == pipex.cmd_count - 1)
+	if (count == pipex->cmd_count - 1)
 	{
-		dup2(pipex.file2, STDOUT_FILENO);
-		close(pipex.file2);
-		close(pipex.file1);
+		pipex->file2 = open(pipex -> outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		// protection 
+		// open outfile here
+		dup2(pipex->file2, STDOUT_FILENO);
+		close(pipex->file2);
 	}
-	else
+	if (count != 0)
 	{
-		dup2(pipex.fd[1], STDOUT_FILENO);
-		close(pipex.file2);
-		close(pipex.fd[0]);
+		dup2(pipex->prev, STDIN_FILENO);
+		close(pipex->prev);
 	}
-	execve(cmd->path, cmd->cmd, env);
-	perror("execve");
-	close(pipex.fd[1]);
+
+	if (count != pipex->cmd_count - 1)
+		dup2(pipex->fd[1], STDOUT_FILENO);
+
+	close(pipex->fd[0]);
+	close(pipex->fd[1]);
+	if (cmd->path)
+		execve(cmd->path, cmd->cmd, env);
+	write(2, "Cmd error\n", 10);
+	// free EVERYTHING
 	exit(1);
-}
-
-void	init_child(int count, t_pipex pipex, char **env, t_a_list *cmd)
-{
-	pid_t	pid;
-
-	if (pipe(pipex.fd) == -1)
-	{
-		ft_putstr_fd("An error occurred with the pipe creation", 2);
-		exit(1);
-		// Don't forget to free resources
-	}
-	pid = fork();
-	if (pid < 0)
-	{
-		ft_putstr_fd("An error occurred with the forking", 2);
-		exit(1);
-	}
-	if (pid == 0)
-	{
-		setup_child(count, pipex, env, cmd);
-	}
-	else
-	{
-		waitpid(pid, 0, 0);
-		close(pipex.fd[1]);
-		dup2(pipex.fd[0], STDIN_FILENO);
-	}
 }
 
 void	execute(t_pipex pipex, char **env)
@@ -74,10 +77,35 @@ void	execute(t_pipex pipex, char **env)
 
 	i = 0;
 	cmd = pipex.cmd->first;
+	pipex.prev = -1;
+	int *pid = malloc(sizeof(int) * pipex.cmd_count);
 	while (cmd != NULL)
 	{
-		init_child(i, pipex, env, cmd);
+		pipe(pipex.fd);
+		pid[i] = fork();
+		if (pid[i] < 0)
+		{
+			// free thingd
+			exit(1);
+		}
+		else if (pid[i] == 0)
+			setup_child(i, &pipex, env, cmd);
+		else
+		{
+			close(pipex.fd[1]);
+			if (i > 0)
+				close(pipex.prev);
+			pipex.prev = pipex.fd[0];
+		}
 		cmd = cmd->next;
 		i++;
 	}
+	i = 0;
+	while (i < pipex.cmd_count)
+	{
+		waitpid(pid[i], NULL, 0);
+    	i++;
+	}
+	// here do a while loop for every pid of every forks, its cleaner and better
+	// so factorize ur code, a lot of things are in common in each of ur childs so u can simply malloc a table of int for your forks
 }
