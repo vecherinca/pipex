@@ -6,7 +6,7 @@
 /*   By: mklimina <mklimina@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 20:36:37 by mklimina          #+#    #+#             */
-/*   Updated: 2023/10/04 17:38:05 by mklimina         ###   ########.fr       */
+/*   Updated: 2023/10/04 23:38:57 by mklimina         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,9 @@ typedef struct t_pipex
 }					t_pipex;
 
 char				**ft_split(char const *s, char c);
+void				check_argc(int argc);
+void				setup_child(int count, t_pipex *pipex, char **env,
+						t_a_list *cmd);
 void				*ft_calloc(size_t nmemb, size_t size);
 t_head_a			*define_list(int argc, char **argv, t_pipex pipex);
 char				**parse_env(char **env);
@@ -67,6 +70,8 @@ void				print_cmd_does_not_exist(char *cmd);
 void				free_2dim(char **to_free);
 void				execute(t_pipex pipex, char **env);
 void				free_list(t_a_list *head, t_head_a *main);
+void				execute_commands(t_pipex pipex, t_a_list *cmd, char **env,
+						int i);
 int					ft_strcmp(char *s1, char *s2);
 t_pipex				init(char **argv, t_pipex pipex, int argc, char **env);
 t_pipex				here_doc_init(int argc, char **argv, char **env,
@@ -75,4 +80,6 @@ void				free_everything(t_pipex *pipex);
 void				here_doc(t_pipex pipex);
 void				ft_putstr_fd(char *s, int fd);
 char				*return_path(char *path, char *cmd);
+char				*iter_paths(char *cmd, t_pipex pipex);
+char				*get_path2(char *cmd);
 #endif

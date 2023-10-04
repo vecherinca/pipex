@@ -6,7 +6,7 @@
 /*   By: mklimina <mklimina@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 20:36:15 by mklimina          #+#    #+#             */
-/*   Updated: 2023/10/04 17:38:25 by mklimina         ###   ########.fr       */
+/*   Updated: 2023/10/04 23:37:42 by mklimina         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,27 +20,24 @@
 char	*get_path(char *cmd, t_pipex pipex)
 {
 	char	*path;
-	int		flag;
-	int		i;
 
-	i = 0;
-	while (pipex.paths[i] != NULL)
+	if (!cmd)
 	{
-		path = return_path(pipex.paths[i], cmd);
-		if (access(path, R_OK) != -1)
-		{
-			flag = 1;
-			return (path);
-		}
-		else
-		{
-			free(path);
-			flag = 0;
-		}
-		i++;
+		ft_putstr_fd("command not found:\n", 2);
+		return (0);
 	}
-	if (flag == 0)
-		print_cmd_does_not_exist(cmd);
+	if (cmd[0] == '/')
+	{
+		path = ft_strdup(cmd);
+		path = get_path2(path);
+		return (path);
+	}
+	else
+	{
+		path = iter_paths(cmd, pipex);
+		if (path != 0)
+			return (path);
+	}
 	return (0);
 }
 
@@ -106,11 +103,7 @@ int	main(int argc, char **argv, char **env)
 {
 	t_pipex	pipex;
 
-	if (argc < 5)
-	{
-		ft_putstr_fd("Verify your commands once again.", 2);
-		exit(26);
-	}
+	check_argc(argc);
 	if (!ft_strcmp(argv[1], "here_doc"))
 	{
 		if (argc != 6)
@@ -129,4 +122,6 @@ int	main(int argc, char **argv, char **env)
 	execute(pipex, env);
 	free_list(pipex.cmd->first, pipex.cmd);
 	free_2dim(pipex.paths);
+	if (pipex.is_here_doc == 1)
+		close(pipex.file1);
 }

@@ -6,7 +6,7 @@
 /*   By: mklimina <mklimina@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 16:58:27 by mklimina          #+#    #+#             */
-/*   Updated: 2023/10/04 18:44:52 by mklimina         ###   ########.fr       */
+/*   Updated: 2023/10/04 23:23:01 by mklimina         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,10 @@ void	do_exec(t_pipex *pipex, char **env, t_a_list *cmd)
 	if (cmd->path)
 		execve(cmd->path, cmd->cmd, env);
 	else
+	{
 		free_everything(pipex);
+		exit(1);
+	}
 }
 
 void	setup_child(int count, t_pipex *pipex, char **env, t_a_list *cmd)
@@ -69,7 +72,6 @@ void	setup_child(int count, t_pipex *pipex, char **env, t_a_list *cmd)
 	close(pipex->fd[0]);
 	close(pipex->fd[1]);
 	do_exec(pipex, env, cmd);
-	exit(1);
 }
 
 void	execute(t_pipex pipex, char **env)
@@ -86,27 +88,7 @@ void	execute(t_pipex pipex, char **env)
 		free_everything(&pipex);
 		exit(25);
 	}
-	while (cmd != NULL)
-	{
-		pipe(pipex.fd);
-		pipex.pid[i] = fork();
-		if (pipex.pid[i] < 0)
-		{
-			free_everything(&pipex);
-			exit(1);
-		}
-		else if (pipex.pid[i] == 0)
-			setup_child(i, &pipex, env, cmd);
-		else
-		{
-			close(pipex.fd[1]);
-			if (i > 0)
-				close(pipex.prev);
-			pipex.prev = pipex.fd[0];
-		}
-		cmd = cmd->next;
-		i++;
-	}
+	execute_commands(pipex, cmd, env, i);
 	i = 0;
 	while (i < pipex.cmd_count)
 	{

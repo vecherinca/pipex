@@ -6,7 +6,7 @@
 /*   By: mklimina <mklimina@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 16:55:35 by mklimina          #+#    #+#             */
-/*   Updated: 2023/10/03 17:16:29 by mklimina         ###   ########.fr       */
+/*   Updated: 2023/10/04 23:17:50 by mklimina         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ char	*return_path(char *path, char *cmd)
 void	print_cmd_does_not_exist(char *cmd)
 {
 	ft_putstr_fd(cmd, 2);
-	ft_putstr_fd(":Command does not exist", 2);
+	ft_putstr_fd(":Command does not exist\n", 2);
 }
 
 int	ft_strlen(const char *s)
