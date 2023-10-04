@@ -6,40 +6,56 @@
 /*   By: mklimina <mklimina@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 16:58:27 by mklimina          #+#    #+#             */
-/*   Updated: 2023/10/04 17:45:32 by mklimina         ###   ########.fr       */
+/*   Updated: 2023/10/04 18:44:52 by mklimina         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
-void open_first_file()
+
+int	open_first_file(t_pipex *pipex)
 {
-	
+	if (pipex->is_here_doc == 0)
+	{
+		pipex->file1 = open(pipex->infile, O_RDONLY);
+		if (pipex->file1 < 0)
+		{
+			free_everything(pipex);
+			exit(24);
+		}
+	}
+	return (pipex->file1);
+}
+
+int	open_last_file(t_pipex *pipex)
+{
+	pipex->file2 = open(pipex->outfile, O_CREAT | O_RDWR | O_TRUNC, 0666);
+	if (pipex->file2 < 0)
+	{
+		free_everything(pipex);
+		exit(24);
+	}
+	return (pipex->file2);
+}
+
+void	do_exec(t_pipex *pipex, char **env, t_a_list *cmd)
+{
+	if (cmd->path)
+		execve(cmd->path, cmd->cmd, env);
+	else
+		free_everything(pipex);
 }
 
 void	setup_child(int count, t_pipex *pipex, char **env, t_a_list *cmd)
 {
 	if (count == 0)
 	{
-		if (pipex->is_here_doc == 0)
-		{
-			pipex->file1 = open(pipex->infile, O_RDONLY);
-			if (pipex->file1 < 0)
-			{
-				free_everything(pipex);
-				exit(24);
-			}
-		}
+		pipex->file1 = open_first_file(pipex);
 		dup2(pipex->file1, STDIN_FILENO);
 		close(pipex->file1);
 	}
 	if (count == pipex->cmd_count - 1)
 	{
-		pipex->file2 = open(pipex->outfile, O_CREAT | O_RDWR | O_TRUNC, 0666);
-		if (pipex->file2 < 0)
-		{
-			free_everything(pipex);
-			exit(24);
-		}
+		pipex->file2 = open_last_file(pipex);
 		dup2(pipex->file2, STDOUT_FILENO);
 		close(pipex->file2);
 	}
@@ -52,14 +68,7 @@ void	setup_child(int count, t_pipex *pipex, char **env, t_a_list *cmd)
 		dup2(pipex->fd[1], STDOUT_FILENO);
 	close(pipex->fd[0]);
 	close(pipex->fd[1]);
-	if (cmd->path)
-		execve(cmd->path, cmd->cmd, env);
-	else
-	{
-		free_list(pipex->cmd->first, pipex->cmd);
-		free_2dim(pipex->paths);
-		free(pipex->pid);
-	}
+	do_exec(pipex, env, cmd);
 	exit(1);
 }
 
