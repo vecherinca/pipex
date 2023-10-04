@@ -6,7 +6,7 @@
 /*   By: mklimina <mklimina@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 20:36:37 by mklimina          #+#    #+#             */
-/*   Updated: 2023/10/03 19:56:43 by mklimina         ###   ########.fr       */
+/*   Updated: 2023/10/04 17:38:05 by mklimina         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ typedef struct t_pipex
 	char			**args;
 	char			*cmd1;
 	char			*cmd2;
+	int				*pid;
 	int				is_here_doc;
 	t_head_a		*cmd;
 
@@ -70,7 +71,7 @@ int					ft_strcmp(char *s1, char *s2);
 t_pipex				init(char **argv, t_pipex pipex, int argc, char **env);
 t_pipex				here_doc_init(int argc, char **argv, char **env,
 						t_pipex pipex);
-
+void				free_everything(t_pipex *pipex);
 void				here_doc(t_pipex pipex);
 void				ft_putstr_fd(char *s, int fd);
 char				*return_path(char *path, char *cmd);

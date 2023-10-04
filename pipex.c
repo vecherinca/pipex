@@ -6,7 +6,7 @@
 /*   By: mklimina <mklimina@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 20:36:15 by mklimina          #+#    #+#             */
-/*   Updated: 2023/10/03 18:25:52 by mklimina         ###   ########.fr       */
+/*   Updated: 2023/10/04 17:38:25 by mklimina         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,11 @@ t_head_a	*define_list(int argc, char **argv, t_pipex pipex)
 	if (!point)
 		return (NULL);
 	point->first = create_list(argc, argv, pipex);
+	if (!point->first)
+	{
+		free_everything(&pipex);
+		exit(25);
+	}
 	return (point);
 }
 
@@ -101,14 +106,26 @@ int	main(int argc, char **argv, char **env)
 {
 	t_pipex	pipex;
 
+	if (argc < 5)
+	{
+		ft_putstr_fd("Verify your commands once again.", 2);
+		exit(26);
+	}
 	if (!ft_strcmp(argv[1], "here_doc"))
 	{
+		if (argc != 6)
+		{
+			ft_putstr_fd("Verify your commands once again.", 2);
+			exit(26);
+		}
 		pipex = here_doc_init(argc, argv, env, pipex);
 		here_doc(pipex);
 		free(pipex.limiter);
 	}
 	else
+	{
 		pipex = init(argv, pipex, argc, env);
+	}
 	execute(pipex, env);
 	free_list(pipex.cmd->first, pipex.cmd);
 	free_2dim(pipex.paths);

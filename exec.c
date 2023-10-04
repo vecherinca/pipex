@@ -6,42 +6,40 @@
 /*   By: mklimina <mklimina@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 16:58:27 by mklimina          #+#    #+#             */
-/*   Updated: 2023/10/03 21:42:23 by mklimina         ###   ########.fr       */
+/*   Updated: 2023/10/04 17:45:32 by mklimina         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
-
-
-
-
-
-
-// ./pipex Makefile ls cat grep wc lsblk outfile
-
-
-// 0 = ls
-// last = lsblk
-
-// 0 != cat grep wc lsblk
-
-// last != ls cat grep wc 
+void open_first_file()
+{
+	
+}
 
 void	setup_child(int count, t_pipex *pipex, char **env, t_a_list *cmd)
 {
-	// free(pid);
-	// open files here !!!!!
-	// if it fails exit
 	if (count == 0)
 	{
-		if (pipex -> is_here_doc == 0)
-			pipex->file1 = open(pipex -> infile, O_RDONLY);
+		if (pipex->is_here_doc == 0)
+		{
+			pipex->file1 = open(pipex->infile, O_RDONLY);
+			if (pipex->file1 < 0)
+			{
+				free_everything(pipex);
+				exit(24);
+			}
+		}
 		dup2(pipex->file1, STDIN_FILENO);
 		close(pipex->file1);
 	}
 	if (count == pipex->cmd_count - 1)
 	{
-		pipex->file2 = open(pipex -> outfile, O_CREAT | O_RDWR | O_TRUNC, 0666);
+		pipex->file2 = open(pipex->outfile, O_CREAT | O_RDWR | O_TRUNC, 0666);
+		if (pipex->file2 < 0)
+		{
+			free_everything(pipex);
+			exit(24);
+		}
 		dup2(pipex->file2, STDOUT_FILENO);
 		close(pipex->file2);
 	}
@@ -50,16 +48,18 @@ void	setup_child(int count, t_pipex *pipex, char **env, t_a_list *cmd)
 		dup2(pipex->prev, STDIN_FILENO);
 		close(pipex->prev);
 	}
-
 	if (count != pipex->cmd_count - 1)
 		dup2(pipex->fd[1], STDOUT_FILENO);
-
 	close(pipex->fd[0]);
 	close(pipex->fd[1]);
 	if (cmd->path)
 		execve(cmd->path, cmd->cmd, env);
-	write(2, "Cmd error\n", 10);
-	// free EVERYTHING
+	else
+	{
+		free_list(pipex->cmd->first, pipex->cmd);
+		free_2dim(pipex->paths);
+		free(pipex->pid);
+	}
 	exit(1);
 }
 
@@ -71,17 +71,22 @@ void	execute(t_pipex pipex, char **env)
 	i = 0;
 	cmd = pipex.cmd->first;
 	pipex.prev = -1;
-	int *pid = malloc(sizeof(int) * pipex.cmd_count);
+	pipex.pid = malloc(sizeof(int) * pipex.cmd_count);
+	if (!pipex.pid)
+	{
+		free_everything(&pipex);
+		exit(25);
+	}
 	while (cmd != NULL)
 	{
 		pipe(pipex.fd);
-		pid[i] = fork();
-		if (pid[i] < 0)
+		pipex.pid[i] = fork();
+		if (pipex.pid[i] < 0)
 		{
-			// free thingd
+			free_everything(&pipex);
 			exit(1);
 		}
-		else if (pid[i] == 0)
+		else if (pipex.pid[i] == 0)
 			setup_child(i, &pipex, env, cmd);
 		else
 		{
@@ -96,9 +101,8 @@ void	execute(t_pipex pipex, char **env)
 	i = 0;
 	while (i < pipex.cmd_count)
 	{
-		waitpid(pid[i], NULL, 0);
-    	i++;
+		waitpid(pipex.pid[i], NULL, 0);
+		i++;
 	}
-	// here do a while loop for every pid of every forks, its cleaner and better
-	// so factorize ur code, a lot of things are in common in each of ur childs so u can simply malloc a table of int for your forks
+	free(pipex.pid);
 }
